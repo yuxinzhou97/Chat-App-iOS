@@ -10,7 +10,7 @@ class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = "💬ChatApp"
+        titleLabel.text = K.appName
         
 //        // Welcome page animation
 //        titleLabel.text = ""
