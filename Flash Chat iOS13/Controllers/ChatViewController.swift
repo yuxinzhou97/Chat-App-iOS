@@ -10,6 +10,7 @@ class ChatViewController: UIViewController {
     let db =  Firestore.firestore()
     
     var messages: [Message] = []
+    var listener: ListenerRegistration? = nil    // ADD
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +25,7 @@ class ChatViewController: UIViewController {
     
     func loadMessages() {
         
-        db.collection(K.FStore.collectionName)
+        listener = db.collection(K.FStore.collectionName)
             .order(by: K.FStore.dateField)
             .addSnapshotListener { (querySnapshot, error) in
             
@@ -76,9 +77,14 @@ class ChatViewController: UIViewController {
     
 
     @IBAction func logOutPressed(_ sender: UIBarButtonItem) {
-        let firebaseAuth = Auth.auth()
+        
+        if let l = listener {
+            l.remove()
+        }
+        
+        Auth.auth()
         do {
-          try firebaseAuth.signOut()
+          try Auth.auth().signOut()
             navigationController?.popToRootViewController(animated: true)
         } catch let signOutError as NSError {
           print ("Error signing out: %@", signOutError)
